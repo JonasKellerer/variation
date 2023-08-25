@@ -40,4 +40,9 @@ export default defineConfig({
     //   use: { ..devices['Desktop Chrome'], channel: 'chrome' },
     // },
   ],
+
+  webServer: {
+    command: "npm run build && npm run start",
+    url: "http://localhost:3000/",
+  },
 });
