@@ -1,0 +1,6 @@
+---
+- name: Update website
+  ansible.builtin.command: |
+    docker stop variation_website
+    docker compose pull
+    docker compose up -d

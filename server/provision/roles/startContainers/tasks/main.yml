@@ -1,0 +1,6 @@
+---
+- name: Start containers
+  ansible.builtin.command: |
+    docker compose down
+    docker compose pull
+    docker compose up -d

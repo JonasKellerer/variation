@@ -1,0 +1,12 @@
+name: Provision Server
+
+on: workflow_dispatch
+
+jobs:
+  provisionServer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ProvisionServer
+        uses: ./.github/workflows/reusable-workflow.yml@main
+        with:
+          ansible_file: 'provision/provisionServer.yml'

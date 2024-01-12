@@ -1,0 +1,10 @@
+---
+- name: Provision Server
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: general
+    - role: docker
+    - role: nginx

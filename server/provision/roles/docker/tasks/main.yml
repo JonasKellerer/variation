@@ -1,0 +1,6 @@
+---
+- name: Install Docker
+  ansible.builtin.include_role:
+    name: geerlingguy.docker
+  vars:
+    docker_users: "{{ server_docker_users | default(['root']) }}"
