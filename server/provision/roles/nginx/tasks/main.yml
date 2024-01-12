@@ -1,0 +1,59 @@
+---
+- name: Set Generate Self Signed Certs Variable
+  ansible.builtin.set_fact:
+    generate_self_signed_certs: "{{ generate_self_signed_certs | default(false) }}"
+
+- name: Check Whether SSL Certificates Are Present
+  when: generate_self_signed_certs
+  ansible.builtin.stat:
+    path: /etc/nginx/certificates/private_key.pem
+  register: nginx_certificates_present
+  changed_when: false
+
+- name: Make Sure That /etc/nginx/certificates Exists
+  when:
+    - generate_self_signed_certs
+    - not nginx_certificates_present.stat.exists
+  ansible.builtin.file:
+    path: /etc/nginx/certificates
+    state: directory
+    mode: u=rwx,g=rwx,o=rwx
+  changed_when: true
+
+- name: Create Self-Signed SSL Certificates
+  when:
+    - generate_self_signed_certs
+    - not nginx_certificates_present.stat.exists
+  ansible.builtin.command: |
+    openssl req -x509 -new -keyout private_key.pem -out cert.pem -subj "/CN=localhost" -noenc
+  args:
+    chdir: /etc/nginx/certificates
+  changed_when: true
+
+- name: Install NGINX
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+
+- name: Delete Default Config
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Copy Nginx Config
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /etc/nginx/conf.d
+    mode: u=rw,g=rw,o=r
+  with_fileglob:
+    - templates/conf.d/*
+
+- name: Check Config
+  ansible.builtin.command: nginx -t
+  changed_when: false
+
+- name: Restart Nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
