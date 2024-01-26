@@ -35,6 +35,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: latest
 
       - name: Build and push image
         uses: docker/build-push-action@v5
@@ -44,10 +45,10 @@ jobs:
           tags: ${{ steps.dockerMetadata.outputs.tags }}
           labels: ${{ steps.dockerMetadata.outputs.labels }}
 
-  updateDockerImages:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update docker images
-        uses: ./.github/workflows/reusable-workflow.yml@main
-        with:
-          ansible_file: 'provision/updateWebsite.yml'
+#  updateDockerImages:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Update docker images
+#        uses: ./.github/workflows/ansibleOnServer.yml@main
+#        with:
+#          ansible_file: 'provision/updateWebsite.yml'

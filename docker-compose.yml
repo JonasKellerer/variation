@@ -2,6 +2,7 @@ version: "3"
 
 services:
   website:
+    image: ghcr.io/jonaskellerer/variation:latest
     container_name: variation_website
     build:
       context: ./website

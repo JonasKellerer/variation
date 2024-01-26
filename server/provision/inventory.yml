@@ -1,0 +1,10 @@
+all:
+  hosts:
+    varilis.de:
+      ansible_connection: ssh
+      ansible_user: "{{ remote_server_user }}"
+      ansible_become: true
+  vars:
+    server_docker_users:
+      - root
+      - variation
