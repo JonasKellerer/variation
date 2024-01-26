@@ -1,6 +1,12 @@
 ---
+- name: Stop containers
+  ansible.builtin.command: |
+    docker-compose down
+
+- name: Pulling containers
+  ansible.builtin.command: |
+    docker-compose pull
+
 - name: Start containers
   ansible.builtin.command: |
-    docker compose down
-    docker compose pull
-    docker compose up -d
+    docker-compose up -d
