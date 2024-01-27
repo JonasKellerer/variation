@@ -7,7 +7,19 @@ on:
         description: 'Ansible file to run'
         required: true
         type: string
-
+    secrets:
+      SERVER_SSH_PRIVATE_KEY:
+        description: 'SSH private key for server'
+        required: true
+      SERVER_IP_ADDRESS:
+        description: 'IP address of server'
+        required: true
+      SERVER_USER:
+        description: 'User on server'
+        required: true
+      SERVER_USER_PASSWORD:
+        description: 'Password of user on server'
+        required: true
 
 jobs:
   ansibleOnServer:
@@ -21,18 +33,28 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip
+
       - name: Install Ansible
         run: |
           python -m pip install --upgrade pip
-          pip install ansible
+          pip install -r server/provision/requirements.txt
 
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H {{ secrets.SERVER_IP_ADDRESS }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SERVER_IP_ADDRESS }} >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
 
       - name: Run Ansible
         run: |
-          ansible-playbook --inventory inventory_for_ci.yml --extra-vars "remote_server_user=${{ secrets.SERVER_USER }} remote_server_password=${{ secrets.SERVER_USER_PASSWORD }}" ${{ inputs.ansible_file }}
+          ansible-playbook --inventory server/provision/inventory_for_ci.yml --extra-vars "remote_server_user=${{ secrets.SERVER_USER }} remote_server_password=${{ secrets.SERVER_USER_PASSWORD }}" ${{ inputs.ansible_file }}
