@@ -4,9 +4,11 @@ on: workflow_dispatch
 
 jobs:
   provisionServer:
-    runs-on: ubuntu-latest
-    steps:
-      - name: ProvisionServer
-        uses: ./.github/workflows/ansibleOnServer.yml@main
-        with:
-          ansible_file: 'provision/startContainers.yml'
+    uses: ./.github/workflows/ansibleOnServer.yml
+    with:
+      ansible_file: 'server/provision/startContainers.yml'
+    secrets:
+      SERVER_SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+      SERVER_IP_ADDRESS: ${{ secrets.SERVER_IP_ADDRESS }}
+      SERVER_USER: ${{ secrets.SERVER_USER }}
+      SERVER_USER_PASSWORD: ${{ secrets.SERVER_USER_PASSWORD }}
