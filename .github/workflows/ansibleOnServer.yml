@@ -28,6 +28,15 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP_ADDRESS }} >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -46,15 +55,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r server/provision/requirements.txt
 
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SERVER_IP_ADDRESS }} >> ~/.ssh/known_hosts
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-
       - name: Run Ansible
         run: |
-          ansible-playbook --inventory server/provision/inventory_for_ci.yml --extra-vars "remote_server_user=${{ secrets.SERVER_USER }} remote_server_password=${{ secrets.SERVER_USER_PASSWORD }}" ${{ inputs.ansible_file }}
+          ansible-playbook --inventory server/provision/inventory_for_ci.yml --extra-vars "remote_server_user=${{ secrets.SERVER_USER }} remote_server_password=${{ secrets.SERVER_USER_PASSWORD }} remote_server_ip=${{ secrets.SERVER_IP_ADDRESS }}" ${{ inputs.ansible_file }}
