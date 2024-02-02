@@ -11,9 +11,12 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@types/mongodb": "^4.0.7",
+    "mongodb": "^6.3.0",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@testing-library/react": "^14.1.2",
