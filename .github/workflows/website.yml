@@ -72,3 +72,36 @@ jobs:
 
       - name: Run tests
         run: yarn test
+
+  end2endTests:
+    name: End to End Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache yarn
+        uses: actions/cache@v4
+        id: yarn-cache
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('variation/**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Start database
+        run: docker-compose -f ../docker-compose.yml up -d database
+
+      - name: Run tests
+        run: yarn e2e
