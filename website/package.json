@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write '*/**/*.{js,jsx,ts,tsx,json,css,md}'",
-    "test": "vitest"
+    "test": "vitest",
+    "cypress:open": "cypress open",
+    "e2e": "cypress run --e2e"
   },
   "dependencies": {
     "@types/mongodb": "^4.0.7",
@@ -27,6 +29,7 @@
     "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-react": "^4.3.2",
     "autoprefixer": "^10.4.20",
+    "cypress": "^13.6.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "eslint-config-prettier": "^9.1.0",
