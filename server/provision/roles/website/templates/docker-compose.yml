@@ -3,10 +3,6 @@ version: "3"
 services:
   website:
     image: ghcr.io/jonaskellerer/variation/website:{{ website_version}}
-    build:
-      context: ./website
-      dockerfile: Dockerfile
-    restart: always
     ports:
       - 3000:3000
 
@@ -15,6 +11,5 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-    restart: always
     ports:
       - 27017:27017
