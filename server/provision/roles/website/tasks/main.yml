@@ -1,0 +1,44 @@
+---
+
+- name: Create dashboards directory
+  ansible.builtin.file:
+    path: "{{ website_path }}"
+    state: directory
+    mode: u=rwx,g=rwx,o=rwx
+
+- name: Add Subdirectories
+  ansible.builtin.file:
+    path: "{{ website_path }}/{{ item.path }}"
+    state: directory
+    mode: u=rwx,g=rwx,o=rwx
+  with_community.general.filetree: "templates/"
+  when: item.state == 'directory'
+
+- name: Copy Files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ website_path }}/{{ item.path }}"
+    mode: u=rw,g=rw,o=r
+  with_community.general.filetree: "templates/"
+  when: item.state == 'file'
+
+- name: Stop containers
+  ansible.builtin.command: |
+    docker-compose down
+  args:
+    chdir: "{{ website_path }}"
+  changed_when: true
+
+- name: Pulling containers
+  ansible.builtin.command: |
+    docker-compose pull
+  args:
+    chdir: "{{ website_path }}"
+  changed_when: true
+
+- name: Start containers
+  ansible.builtin.command: |
+    docker-compose up -d
+  args:
+    chdir: "{{ website_path }}"
+  changed_when: true

@@ -1,0 +1,14 @@
+---
+
+- name: Check Whether Watchtower is Running
+  ansible.builtin.command: docker ps --filter name=watchtower --format {% raw %} "{{json .Names}}" {% endraw %}
+  register: watchtower_is_running
+  ignore_errors: true
+  changed_when: watchtower_is_running.stdout == ""
+
+- name: Start Watchtower
+  when: watchtower_is_running.stdout == ""
+  changed_when: watchtower_is_running.stdout != ""
+  ansible.builtin.command: |
+    docker run --rm --detach --name watchtower --volume /var/run/docker.sock:/var/run/docker.sock \
+      containrrr/watchtower --interval 60 --cleanup

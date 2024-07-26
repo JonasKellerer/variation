@@ -1,0 +1,2 @@
+website_path: "{{ base_path }}/website"
+website_version: "latest"

@@ -8,3 +8,4 @@ all:
     server_docker_users:
       - root
       - variation
+    base_path: /opt
