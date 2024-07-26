@@ -139,5 +139,8 @@ jobs:
       - name: Start database
         run: docker-compose -f ../docker-compose.yml up -d database
 
+      - name: Run website
+        run: yarn build && yarn start
+
       - name: Run tests
         run: yarn e2e
