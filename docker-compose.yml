@@ -2,7 +2,7 @@ version: "3"
 
 services:
   website:
-    image: ghcr.io/jonaskellerer/variation/website:latest
+    container_name: website
     build:
       context: ./website
       dockerfile: Dockerfile
