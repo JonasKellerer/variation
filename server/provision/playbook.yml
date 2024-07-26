@@ -7,5 +7,6 @@
   roles:
     - role: general
     - role: docker
-    - role: copyData
     - role: nginx
+    - role: watchtower
+    - role: website

@@ -1,9 +1,0 @@
----
-
-- name: Copy docker-compose.yml
-  ansible.builtin.copy:
-    src: ../../../../../docker-compose.yml
-    dest: /home/{{ remote_server_user }}/docker-compose.yml
-    owner: "{{ remote_server_user }}"
-    group: "{{ remote_server_user }}"
-    mode: 0644

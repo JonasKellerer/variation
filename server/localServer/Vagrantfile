@@ -1,0 +1,22 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "192.168.56.11" # implicitly set Ansible inventory_hostname
+
+  config.vm.box = "ubuntu/jammy64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+    vb.cpus = 1
+  end
+
+  config.vm.network "private_network", ip: "192.168.56.11"
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.galaxy_role_file = '../provision/requirements.yml'
+    ansible.galaxy_command = 'ansible-galaxy install --role-file=%{role_file} --ignore-errors'
+    ansible.playbook = "../provision/playbook.yml"
+    ansible.extra_vars = {
+      generate_self_signed_certs: true,
+      base_path: "/opt"
+    }
+  end
+end
