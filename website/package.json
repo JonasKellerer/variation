@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@types/mongodb": "^4.0.7",
-    "mongodb": "^6.9.0",
+    "mongodb": "^6.10.0",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
@@ -27,9 +27,9 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "@vitejs/plugin-react": "^4.3.2",
+    "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
-    "cypress": "^13.6.4",
+    "cypress": "^13.15.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "eslint-config-prettier": "^9.1.0",
@@ -37,8 +37,8 @@
     "jsdom": "^25.0.1",
     "postcss": "^8",
     "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.13",
+    "tailwindcss": "^3.4.15",
     "typescript": "^5",
-    "vitest": "^2.1.2"
+    "vitest": "^2.1.5"
   }
 }
