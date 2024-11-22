@@ -2,7 +2,7 @@ describe('Navigation', () => {
     it('should navigate to the survey page', () => {
         cy.visit('http://localhost:3000');
 
-        cy.get('a[href*="survey"]').click();
+        cy.get('a[href*="survey"]').first().click();
 
         cy.url().should('include', '/survey');
 
